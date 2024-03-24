@@ -10,7 +10,7 @@
 // can be modified if you wish to add other methods to the class
 
 class ClimbingDifficultyCalculator{
-    public :
-        ClimbingDifficultyCalculator();
-        int CalculateClimbingDifficulty(std::string);
+public:
+    ClimbingDifficultyCalculator();
+    int CalculateClimbingDifficulty(std::string);
 };
