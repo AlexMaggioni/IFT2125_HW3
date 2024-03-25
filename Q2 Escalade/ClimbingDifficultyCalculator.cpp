@@ -18,28 +18,28 @@ std::vector<int> update_path_with_new_row(const std::vector<int>& current, const
     std::vector<int> temp(n, std::numeric_limits<int>::max());
     std::vector<int> left_cumulative(n), right_cumulative(n);
 
-    // Calculate left cumulative sum for the next_row
+    // Calcule la somme cumulative gauche pour la nouvelle ligne
     for (int i = 0; i < n; ++i) {
         left_cumulative[i] = next_row[i] + (i > 0 ? left_cumulative[i-1] : 0);
     }
 
-    // Calculate right cumulative sum for the next_row
+    // Calcule la somme cumulative droite pour la nouvelle ligne
     for (int i = n-1; i >= 0; --i) {
         right_cumulative[i] = next_row[i] + (i < n-1 ? right_cumulative[i+1] : 0);
     }
 
-    // For each position in current, calculate the minimum cost to move to the kth cell in the next_row
+    // Pour chaque position dans l'actuelle, calcule le coût minimum pour se déplacer vers la k-ième cellule dans la nouvelle ligne
     for (int k = 0; k < n; ++k) {
-        // Starting from the current position
+        // En partant de la position actuelle
         temp[k] = std::min(temp[k], current[k] + next_row[k]);
 
-        // Calculate cost to move to the right
+        // Calcule le coût pour se déplacer à droite
         for (int j = k + 1; j < n; ++j) {
             int cost = left_cumulative[j] - (k > 0 ? left_cumulative[k-1] : 0) + current[k];
             temp[j] = std::min(temp[j], cost);
         }
 
-        // Calculate cost to move to the left
+        // Calcule le coût pour se déplacer à gauche
         for (int j = k - 1; j >= 0; --j) {
             int cost = right_cumulative[j] - (k < n-1 ? right_cumulative[k+1] : 0) + current[k];
             temp[j] = std::min(temp[j], cost);
