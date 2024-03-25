@@ -13,25 +13,25 @@
 
 ClimbingDifficultyCalculator::ClimbingDifficultyCalculator() {}
 
-std::vector<int> best_next_path(const std::vector<int>& current, const std::vector<std::vector<int>>& matrix, int above_index) {
+std::vector<int> update_path_with_new_row(const std::vector<int>& current, const std::vector<int>& next_row) {
     int n = current.size();
     std::vector<int> temp(n, std::numeric_limits<int>::max());
     std::vector<int> left_cumulative(n), right_cumulative(n);
 
-    // Calculate left cumulative sum for the above line
+    // Calculate left cumulative sum for the next_row
     for (int i = 0; i < n; ++i) {
-        left_cumulative[i] = matrix[above_index][i] + (i > 0 ? left_cumulative[i-1] : 0);
+        left_cumulative[i] = next_row[i] + (i > 0 ? left_cumulative[i-1] : 0);
     }
 
-    // Calculate right cumulative sum for the above line
+    // Calculate right cumulative sum for the next_row
     for (int i = n-1; i >= 0; --i) {
-        right_cumulative[i] = matrix[above_index][i] + (i < n-1 ? right_cumulative[i+1] : 0);
+        right_cumulative[i] = next_row[i] + (i < n-1 ? right_cumulative[i+1] : 0);
     }
 
-    // For each position in current, calculate the minimum cost to move to the kth cell in the above row
+    // For each position in current, calculate the minimum cost to move to the kth cell in the next_row
     for (int k = 0; k < n; ++k) {
         // Starting from the current position
-        temp[k] = std::min(temp[k], current[k] + matrix[above_index][k]);
+        temp[k] = std::min(temp[k], current[k] + next_row[k]);
 
         // Calculate cost to move to the right
         for (int j = k + 1; j < n; ++j) {
@@ -52,27 +52,29 @@ std::vector<int> best_next_path(const std::vector<int>& current, const std::vect
 int ClimbingDifficultyCalculator::CalculateClimbingDifficulty(std::string filename) {
     std::ifstream file(filename);
     std::string line;
-    std::vector<std::vector<int>> matrix;
+    std::vector<int> current_row;
+    bool isFirstRow = true;
 
     while (std::getline(file, line)) {
-        std::vector<int> row;
         std::stringstream ss(line);
         std::string value;
+        std::vector<int> next_row;
+
         while (getline(ss, value, ',')) {
-            row.push_back(std::stoi(value));
+            next_row.push_back(std::stoi(value));
         }
-        matrix.push_back(row);
+
+        if (isFirstRow) {
+            current_row = next_row;
+            isFirstRow = false;
+        } else {
+            current_row = update_path_with_new_row(current_row, next_row);
+        }
     }
     file.close();
 
-    if (matrix.empty()) return 0;
+    if (current_row.empty()) return 0;
 
-    std::vector<int> v = matrix.back();
-
-    for (int i = matrix.size() - 2; i >= 0; --i) {
-        v = best_next_path(v, matrix, i);
-    }
-
-    int min_cost = *std::min_element(v.begin(), v.end());
+    int min_cost = *std::min_element(current_row.begin(), current_row.end());
     return min_cost;
 }
