@@ -23,8 +23,8 @@ def vitre(N, k):
     # Construire dp[][] jusqu'à ce que dp[moves][k] >= N
     while dp[moves][k] < N:
         moves += 1
-        for eggs in range(1, k + 1):
-            dp[moves][eggs] = dp[moves - 1][eggs - 1] + dp[moves - 1][eggs] + 1
+        for window in range(1, k + 1):
+            dp[moves][window] = dp[moves - 1][window - 1] + dp[moves - 1][window] + 1
 
     # Ajuster pour éviter le dernier test si inutile
     upper_bound = N  # Limite supérieure initiale
