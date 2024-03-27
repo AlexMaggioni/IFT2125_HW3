@@ -15,10 +15,26 @@
 #return value : Minimum number of tests needed in the worst case
 #               to find the solidity threshold of a window
 #Must return the answer as an int. 
-def vitre(N, k):
-    
-    return -1
 
+def vitre(N, k):
+    moves = 0
+    dp = [[0] * (k + 1) for _ in range(N + 1)]
+    
+    # Construire dp[][] jusqu'à ce que dp[moves][k] >= N
+    while dp[moves][k] < N:
+        moves += 1
+        for eggs in range(1, k + 1):
+            dp[moves][eggs] = dp[moves - 1][eggs - 1] + dp[moves - 1][eggs] + 1
+
+    # Ajuster pour éviter le dernier test si inutile
+    upper_bound = N  # Limite supérieure initiale
+    for move in range(moves, 0, -1):
+        # Vérifier si le dernier test est redondant
+        if dp[move - 1][k] + 1 == upper_bound:
+            return move - 1
+        upper_bound = dp[move - 1][k] + 1
+    
+    return moves
 
 #Fonction main, vous ne devriez pas avoir à modifier
 #Main function, you shouldn't have to modify it
