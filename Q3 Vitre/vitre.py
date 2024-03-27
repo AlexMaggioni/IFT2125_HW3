@@ -1,5 +1,5 @@
-#Nom, matricule
-#Nom, matricule
+#Alex Maggioni, 20266243
+#Canelle Wagner, 20232321
 
 #Fonction à compléter. Ne modifiez pas sa signature.
 #N : Force maximale
