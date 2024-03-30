@@ -1,3 +1,6 @@
+#Alex Maggioni, 20266243
+#Canelle Wagner, 20232321
+
 import sys
 import random
 
