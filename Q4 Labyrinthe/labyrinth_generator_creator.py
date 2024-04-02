@@ -89,14 +89,14 @@ class Maze:
 class Algorithm1(Strategy):
     def Apply(self):
         print("Applying Algorithm1")
-        self.maze = Maze(13, 13)  
+        self.maze = Maze(25, 25)  
         self.maze.generate()
         print("Maze generation complete.")
     
 class Algorithm2(Strategy):
     def Apply(self):
         print("Applying Algorithm2")
-        self.maze = Maze(13, 13)  # Initialise un labyrinthe de taille 13x13
+        self.maze = Maze(25, 25)  # Initialise un labyrinthe de taille 13x13
         self.prim_generate() 
 
     def prim_generate(self):
@@ -164,7 +164,10 @@ class Creator:
     def __init__(self, maze):
         self.maze = maze  
 
-    def export_to_scad(self, filename):
+    def PrintLabyrinth(self):
+
+        filename = f"labyrinthe_algo{strategy_choice}.scad"
+
         # Exporte le labyrinthe au format SCAD pour OpenSCAD
         with open(filename, 'w') as f:
             f.write('union() {\n')
@@ -244,7 +247,7 @@ def main():
 
     if my_generator.strategy.maze:
         my_creator = Creator(my_generator.strategy.maze)
-        my_creator.export_to_scad(f"labyrinthe_algo{strategy_choice}.scad")
+        my_creator.PrintLabyrinth()
     else:
         print("No maze to export.")
 
